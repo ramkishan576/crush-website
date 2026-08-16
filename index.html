@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Special Invitation — For Sutleza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Josefin+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- floating ambient hearts -->
+<div class="ambient" id="ambient"></div>
+
+<!-- ============ SCREEN 0 : ENVELOPE ============ -->
+<section class="screen" id="screen-envelope">
+  <div class="envelope-wrap">
+    <p class="eyebrow">From Ram, with love</p>
+    <div class="envelope" id="envelope">
+      <div class="envelope-back"></div>
+      <div class="envelope-letter">
+        <p class="letter-to">To,</p>
+        <p class="letter-name">Sutleza</p>
+        <p class="letter-line">A special invitation just for you…</p>
+      </div>
+      <div class="envelope-flap"></div>
+      <div class="wax-seal" id="waxSeal">
+        <span>S</span>
+      </div>
+    </div>
+    <p class="tap-hint">Tap the seal to open</p>
+  </div>
+</section>
+
+<!-- ============ SCREEN 1 : YES / NO QUESTION ============ -->
+<section class="screen hidden" id="screen-question">
+  <div class="card question-card">
+    <p class="eyebrow">Just one question</p>
+    <h1 class="script-heading">Sutleza,</h1>
+    <p class="question-text">will you go on a <em>date</em> with me?</p>
+    <div class="btn-row" id="btnRow">
+      <button class="btn btn-yes" id="btnYes">Yes 💛</button>
+      <button class="btn btn-no" id="btnNo">No</button>
+    </div>
+    <p class="tiny-note" id="noHint">( "No" is a little shy... )</p>
+  </div>
+</section>
+
+<!-- ============ SCREEN 2 : CALENDAR ============ -->
+<section class="screen hidden" id="screen-calendar">
+  <div class="card calendar-card">
+    <p class="eyebrow">Yayy! 🎉</p>
+    <h2 class="script-heading small">Pick a Day</h2>
+    <p class="sub-text">Which day would you like to meet?</p>
+
+    <div class="cal-header">
+      <button class="cal-nav" id="prevMonth" aria-label="Previous month">&#10094;</button>
+      <div class="cal-month" id="calMonthLabel">Month Year</div>
+      <button class="cal-nav" id="nextMonth" aria-label="Next month">&#10095;</button>
+    </div>
+
+    <div class="cal-grid cal-weekdays">
+      <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+    </div>
+    <div class="cal-grid" id="calDays"></div>
+
+    <button class="btn btn-continue" id="btnDateContinue" disabled>Continue →</button>
+  </div>
+</section>
+
+<!-- ============ SCREEN 3 : MENU ============ -->
+<section class="screen hidden" id="screen-menu">
+  <div class="card menu-card">
+    <p class="eyebrow" id="chosenDateLabel">Your Date</p>
+    <h2 class="script-heading small">Choose the Menu</h2>
+    <p class="sub-text">Pick whatever you like 🍽️</p>
+
+    <div class="menu-tabs">
+      <button class="tab-btn active" data-tab="veg">🥗 Veg</button>
+      <button class="tab-btn" data-tab="nonveg">🍗 Non-Veg</button>
+      <button class="tab-btn" data-tab="drinks">🥤 Drinks</button>
+    </div>
+
+    <div class="menu-panel" id="panel-veg"></div>
+    <div class="menu-panel hidden-panel" id="panel-nonveg"></div>
+    <div class="menu-panel hidden-panel" id="panel-drinks"></div>
+
+    <button class="btn btn-book" id="btnBook" disabled>Book the Table 💌</button>
+    <p class="tiny-note" id="selectHint">Select at least one item</p>
+  </div>
+</section>
+
+<!-- ============ SCREEN 4 : THANK YOU ============ -->
+<section class="screen hidden" id="screen-thanks">
+  <div class="confetti" id="confetti"></div>
+  <div class="card thanks-card">
+    <p class="eyebrow">Table Booked ✅</p>
+    <h1 class="script-heading big">Thank You, Sutleza</h1>
+    <p class="thanks-text">Thank you from the bottom of my heart for understanding my feelings.<br>Now all that's left is to wait for that day…</p>
+
+    <div class="summary-box" id="summaryBox"></div>
+
+    <p class="signature">— Ram 🤍</p>
+
+    <button class="btn btn-home" id="btnHome">↺ Back to Home</button>
+  </div>
+</section>
+
+<script src="js/script.js"></script>
+</body>
+</html>
