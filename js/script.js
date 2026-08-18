@@ -39,12 +39,17 @@ function showScreen(id){
 const envelope = document.getElementById('envelope');
 const waxSeal = document.getElementById('waxSeal');
 
-function openEnvelope(){
+function openEnvelope(e){
+  if(e) e.preventDefault();
+  if(envelope.classList.contains('open')) return; // prevent double-fire
   envelope.classList.add('open');
   setTimeout(() => showScreen('screen-question'), 750);
 }
 waxSeal.addEventListener('click', openEnvelope);
 envelope.addEventListener('click', openEnvelope);
+// Mobile: use touchend so it fires instantly without 300ms click delay
+waxSeal.addEventListener('touchend', openEnvelope, {passive:false});
+envelope.addEventListener('touchend', openEnvelope, {passive:false});
 
 // ============================================================
 // SCREEN 1 — YES / NO (the "no" button that runs away)
@@ -126,14 +131,18 @@ function sparkleBurst(x, y){
   }
 }
 
-btnYes.addEventListener('click', (e) => {
+function handleYes(e){
+  if(e) e.preventDefault();
   const rect = btnYes.getBoundingClientRect();
   sparkleBurst(rect.left + rect.width/2, rect.top + rect.height/2);
   setTimeout(() => {
     showScreen('screen-calendar');
     buildCalendar();
   }, 250);
-});
+}
+btnYes.addEventListener('click', handleYes);
+// Mobile: touchend fires instantly, no 300ms delay
+btnYes.addEventListener('touchend', handleYes, {passive:false});
 
 // ============================================================
 // SCREEN 2 — CALENDAR (past dates & past months disabled)

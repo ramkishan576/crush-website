@@ -149,6 +149,8 @@ html,body{
   aspect-ratio: 320 / 200;
   margin: 1.2rem auto 0;
   cursor:pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 .envelope-back{
   position:absolute; inset:0;
@@ -192,7 +194,12 @@ html,body{
   font-family: var(--font-script); font-size:1.6rem; color: var(--cream);
   box-shadow: 0 6px 14px rgba(0,0,0,0.5), inset 0 0 0 2px rgba(255,255,255,0.15);
   z-index:3; cursor:pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   animation: sealBreathe 2.4s ease-in-out infinite;
+}
+@media (max-width:600px){
+  .wax-seal{ width:72px; height:72px; font-size:2rem; }
 }
 @keyframes sealBreathe{ 0%,100%{ transform: translate(-50%,-50%) scale(1);} 50%{ transform: translate(-50%,-50%) scale(1.06);} }
 
@@ -220,6 +227,8 @@ html,body{
   border-radius:999px;
   padding:0.9rem 1.8rem;
   cursor:pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 .btn-yes{
@@ -229,6 +238,9 @@ html,body{
 }
 .btn-yes:hover{ transform: translateY(-2px) scale(1.04); }
 .btn-yes.grow{ transform: scale(1.15); }
+@media (max-width:600px){
+  .btn{ padding:1.1rem 2.2rem; font-size:1.1rem; min-height:52px; }
+}
 
 .btn-no{
   background: rgba(255,255,255,0.08);
