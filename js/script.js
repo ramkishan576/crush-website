@@ -64,12 +64,15 @@ const dodgeMessages = [
 ];
 
 function moveNoButtonRandom(){
+  if (btnNo.parentElement !== document.body) {
+    document.body.appendChild(btnNo);
+  }
   // switch to fixed positioning so it can roam the full viewport
   btnNo.classList.add('roaming');
   const w = btnNo.offsetWidth || 100;
   const h = btnNo.offsetHeight || 48;
-  const maxX = window.innerWidth - w - 16;
-  const maxY = window.innerHeight - h - 16;
+  const maxX = Math.max(0, window.innerWidth - w - 16);
+  const maxY = Math.max(0, window.innerHeight - h - 16);
   const x = Math.max(16, Math.random()*maxX);
   const y = Math.max(16, Math.random()*maxY);
   btnNo.style.left = x + 'px';
@@ -350,6 +353,9 @@ btnHome.addEventListener('click', () => {
   btnNo.classList.remove('roaming');
   btnNo.style.left = '';
   btnNo.style.top = '';
+  if (btnNo.parentElement === document.body) {
+    document.getElementById('btnRow').appendChild(btnNo);
+  }
 
   // reset calendar
   selectedDate = null;
@@ -374,3 +380,93 @@ btnHome.addEventListener('click', () => {
 
 // initial calendar build (in case user lands mid-flow during dev)
 buildCalendar();
+
+// ============================================================
+// CHATBOT LOGIC
+// ============================================================
+const chatbotToggle = document.getElementById('chatbot-toggle');
+const chatbotWindow = document.getElementById('chatbot-window');
+const chatbotMessages = document.getElementById('chatbot-messages');
+const chatbotInput = document.getElementById('chatbot-input-field');
+const chatbotSend = document.getElementById('chatbot-send');
+
+chatbotToggle.addEventListener('click', () => {
+  chatbotWindow.classList.toggle('hidden');
+});
+
+function addBotMessage(text) {
+  const msg = document.createElement('div');
+  msg.className = 'message bot-message';
+  msg.textContent = text;
+  chatbotMessages.appendChild(msg);
+  chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+function addUserMessage(text) {
+  const msg = document.createElement('div');
+  msg.className = 'message user-message';
+  msg.textContent = text;
+  chatbotMessages.appendChild(msg);
+  chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+chatbotSend.addEventListener('click', sendMessage);
+chatbotInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') sendMessage();
+});
+
+async function sendMessage() {
+  const text = chatbotInput.value.trim();
+  if (!text) return;
+  
+  addUserMessage(text);
+  chatbotInput.value = '';
+  
+  // Single bot message div that starts as "typing..." and transitions to streamed text
+  const botMsg = document.createElement('div');
+  botMsg.className = 'message bot-message';
+  botMsg.innerHTML = '<span class="typing-anim">typing</span>';
+  chatbotMessages.appendChild(botMsg);
+  chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text })
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      botMsg.textContent = data.error || data.detail || "Oops, something went wrong.";
+      return;
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+    let gotFirstChunk = false;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      
+      const chunk = decoder.decode(value, { stream: true });
+      if (!chunk.trim()) continue; // skip empty chunks
+      
+      if (!gotFirstChunk) {
+        botMsg.textContent = ''; // clear "typing..."
+        gotFirstChunk = true;
+      }
+      
+      botMsg.textContent += chunk;
+      chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+    
+    // If no text came through at all
+    if (!gotFirstChunk) {
+      botMsg.textContent = "No response received.";
+    }
+  } catch (err) {
+    botMsg.textContent = "Sorry, my server is currently offline.";
+  }
+}
